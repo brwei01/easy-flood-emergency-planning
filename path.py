@@ -27,7 +27,7 @@ class ShortestPath(object):
             for link, details in self.itn_links.items():
                 start_coords = [tuple([details['start_coords'][0], details['start_coords'][1]])]
                 elev_start = [x for x in src.sample(start_coords)]
-                end_coords = [tuple([details['start_coords'][0], details['start_coords'][1]])]
+                end_coords = [tuple([details['end_coords'][0], details['end_coords'][1]])]
                 elev_end = [x for x in src.sample(end_coords)]
                 details['elev_diff'] = elev_end[0] - elev_start[0]
 
