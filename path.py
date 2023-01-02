@@ -28,7 +28,7 @@ class ShortestPath(object):
                 start_coords = [tuple([details['start_coords'][0], details['start_coords'][1]])]
                 elev_start = [x for x in src.sample(start_coords)]
                 end_coords = [tuple([details['start_coords'][0], details['start_coords'][1]])]
-                elev_end = [x for x in src.sample(start_coords)]
+                elev_end = [x for x in src.sample(end_coords)]
                 details['elev_diff'] = elev_end[0] - elev_start[0]
 
         speed_in_mins = 5000 / 60
