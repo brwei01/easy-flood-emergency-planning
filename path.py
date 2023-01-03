@@ -1,6 +1,7 @@
 import rasterio
 import networkx as nx
 import json
+from shapely.geometry import LineString
 
 
 class ShortestPath(object):
@@ -42,20 +43,38 @@ class ShortestPath(object):
 
         return self.itn_links
 
-    def find_path(self, user_itn_fid, evacu_itn_fid):
+    def graph_gen(self):
 
-        # update itn_links
+        '''generate graph'''
         updated_itn_links = self.add_keys_to_itnlink_vertices()
-
-        # graph generating:
         g = nx.Graph()
         for link_fid, details in updated_itn_links.items():
             g.add_edge(details['start'], details['end'], fid=link_fid, weight=details['walking_time'])
+        return g
 
+    def find_path(self, user_itn_fid, evacu_itn_fid):
+
+        g = self.graph_gen()
         # finding the shorest path by dijkstra:
         path = nx.dijkstra_path(g, source=user_itn_fid, target=evacu_itn_fid, weight='weight')
+        # time = nx.dijkstra_path_length(g, source=user_itn_fid, target=evacu_itn_fid, weight='weight')
 
         return path
+
+    def path_to_linestring(self, path):
+        graph = self.graph_gen()
+        links = []
+        geom = []
+        time = 0
+        first_node = path[0]
+        for node in path[1:]:
+            link_fid = graph.edges[first_node, node]['fid']
+            links.append(link_fid)
+            time += graph.edges[first_node, node]['weight']
+            geom.append(LineString(self.itn_links[link_fid]['coords']))
+            first_node = node
+
+        return links, geom, time
 
 
 

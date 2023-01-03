@@ -51,28 +51,25 @@ def main():
 
     # Build compound indexes
     index = pd.MultiIndex.from_product([user_id, evacu_id])
-    path_df = pd.DataFrame(index=index, columns=['path_fid'])
+    path_gdf = gpd.GeoDataFrame(index=index, columns=['path_fid', 'path_geom', 'walking_time'])
 
-
-
-    # create graph and find the shortest paths
-    # there may be multiple solutions
-
-    '''
-    shortest_path_list = []
-    for user_itn_fid in nearest_node_user_input_fid:
-        for evacu_itn_fid in nearest_node_evacu_points_fid:
-            shortest_path_list.append(ShortestPath(itn_file_path, dem_path).find_path(user_itn_fid, evacu_itn_fid)[1])
-    graph = ShortestPath(itn_file_path, dem_path).find_path(user_itn_fid, evacu_itn_fid)[0]
-    print('ready for plotting')
-    '''
     sp = ShortestPath(itn_file_path, dem_path)
     for i, user_itn_fid in enumerate(nearest_node_user_input_fid):
         for j, evacu_itn_fid in enumerate(nearest_node_evacu_points_fid):
             path = sp.find_path(user_itn_fid, evacu_itn_fid)
-            path_df.loc[(i, j), 'path_fid'] = path
+            path_link, path_geom, path_time = sp.path_to_linestring(path)
 
-    print('The paths are:', path_df)
+            path_gdf.loc[(i, j), 'path_fid'] = path_link
+            path_gdf.loc[(i, j), 'path_geom'] = path_geom
+            path_gdf.loc[(i, j), 'walking_time'] = path_time
+
+    print(path_gdf)
+
+    min_walking_time = min(path_gdf['walking_time'])
+    # this is for final plotting, plot this!
+    final_decision_path = path_gdf.loc[path_gdf['walking_time'] == min_walking_time]
+    print(f'The path is {final_decision_path["path_fid"]}')
+    print(f'The total walking time is {final_decision_path["walking_time"]} minutes')
 
     t3 = time.time()
     print(t3 - t2)
