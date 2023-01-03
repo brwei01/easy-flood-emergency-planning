@@ -51,7 +51,7 @@ def main():
 
     # Build compound indexes
     index = pd.MultiIndex.from_product([user_id, evacu_id])
-    path_gdf = gpd.GeoDataFrame(index=index, columns=['path_fid', 'path_geom', 'walking_time'])
+    path_gdf = gpd.GeoDataFrame(index=index, columns=['path_fid', 'path_geom', 'walking_time'], crs='EPSG:27700')
 
     sp = ShortestPath(itn_file_path, dem_path)
     for i, user_itn_fid in enumerate(nearest_node_user_input_fid):
