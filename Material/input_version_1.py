@@ -29,13 +29,13 @@ class User_Input(object):
                 print('Wrong input type, please input a numeric number')
                 proceed = self.proceed_judgement()
             else:
-                try:
-                    sa = Study_Area(easting, northing)
-                    island_boundary = sa.get_island_boundary()
-                    circle = sa.circle()
-                    boundary_rectangle = sa.get_rectangle()
-                    point = Point(easting, northing)
+                sa = Study_Area(easting, northing)
+                island_boundary = sa.get_island_boundary()
+                circle = sa.circle()
+                boundary_rectangle = sa.get_rectangle()
+                point = Point(easting, northing)
 
+                try:
                     if not point.within(island_boundary) and not point.touches(island_boundary):
                         raise Out_of_Island_Area_Error
                     if not point.within(boundary_rectangle) and not point.touches(boundary_rectangle):
