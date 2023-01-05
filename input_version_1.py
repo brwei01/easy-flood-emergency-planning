@@ -3,14 +3,14 @@ import geopandas as gpd
 
 
 # User Input -- returns the study area in shapely shapefile
-class User_Input(object):
+class UserInput(object):
     def __init__(self):
         pass
 
     def proceed_judgement(self):
-        print('Do you wish to proceed?')
+        print('Do you wish to re-enter the values?')
         flag = True
-        user_in = input('[y/n]')
+        user_in = input('input y to re-enter, n to quit the programme[y/n]')
         if user_in == 'y':
             pass
         elif user_in == 'n':
@@ -37,25 +37,24 @@ class User_Input(object):
 
                 try:
                     if not point.within(island_boundary) and not point.touches(island_boundary):
-                        raise Out_of_Island_Area_Error
+                        raise OutIslandAreaError
                     if not point.within(boundary_rectangle) and not point.touches(boundary_rectangle):
-                        raise Out_of_Boundary_Rectangle_Error
+                        raise OutBoundaryRectangleError
                     if any([easting < 425000, northing < 75000, easting > 470000, northing > 100000]):
-                        raise Out_of_Map_Range_Error
+                        raise OutMapRangeError
 
-
-                except Out_of_Island_Area_Error:
+                except OutIslandAreaError:
                     print('Might be a mistake! Input location not on Island')
                     proceed = self.proceed_judgement()
 
                 # if on island but out of study area
-                except Out_of_Map_Range_Error:
+                except OutMapRangeError:
                     print('input location out of map range')
                     proceed = self.proceed_judgement()
 
                 # this following clause is reserved for task 6
                 # if on island but out of 5 km inwards rectangle
-                except Out_of_Boundary_Rectangle_Error:
+                except OutBoundaryRectangleError:
                     print('5km radius from user location out of map range, but no worries system can handle')
                     study_area = circle.intersection(boundary_rectangle)
                     return (easting, northing), study_area
@@ -70,15 +69,15 @@ class Error(Exception):
     pass
 
 
-class Out_of_Boundary_Rectangle_Error(Error):
+class OutBoundaryRectangleError(Error):
     pass
 
 
-class Out_of_Map_Range_Error(Error):
+class OutMapRangeError(Error):
     pass
 
 
-class Out_of_Island_Area_Error(Error):
+class OutIslandAreaError(Error):
     pass
 
 
