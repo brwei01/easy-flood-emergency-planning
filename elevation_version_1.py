@@ -25,9 +25,9 @@ class HighestElevationLocator(object):
     def highest_locator(self):
 
         out_image, out_transform = self.masking()
-        max_elev = out_image.max()
-        evacu_cell_idx = np.where(out_image == max_elev)
-
+        # print(out_image.shape)
+        max_elev = out_image[0].max()
+        evacu_cell_idx = np.where(out_image[0] == max_elev)
         # multiple solutions may be returned from the last line
         evacu_points = []
         for idx in evacu_cell_idx:
