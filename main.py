@@ -9,9 +9,12 @@ import geopandas as gpd
 def main():
 
     # user input and study area generation
-    user_input, study_area = User_Input().input()
-    print("user's location is:", user_input)
-    # Plotter().show_rim(study_area)
+    try:
+        user_input, study_area = User_Input().input()
+        print("user's location is:", user_input)
+        # Plotter().show_rim(study_area)
+    except TypeError:
+        pass
 
     # generating cell values in study area
     t1 = time.time()
