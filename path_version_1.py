@@ -1,7 +1,7 @@
 import rasterio
 import networkx as nx
 import json
-from shapely.geometry import LineString, MultiLineString
+from shapely.geometry import Point, LineString, MultiLineString
 
 class ShortestPath(object):
 
@@ -24,12 +24,18 @@ class ShortestPath(object):
             details['end_coords'] = self.itn_nodes[details['end']]['coords']
 
         with rasterio.open(self.dem_path) as src:
+            elev_data = src.read(1)
             for link, details in self.itn_links.items():
-                start_coords = [tuple([details['start_coords'][0], details['start_coords'][1]])]
-                elev_start = [x for x in src.sample(start_coords)]
-                end_coords = [tuple([details['end_coords'][0], details['end_coords'][1]])]
-                elev_end = [x for x in src.sample(end_coords)]
-                details['elev_diff'] = elev_end[0] - elev_start[0]
+
+                start_coords = Point([tuple([details['start_coords']])])
+                start_row_idx, start_col_idx = src.index(start_coords.x, start_coords.y)
+                elev_start = elev_data[start_row_idx, start_col_idx]
+
+                end_coords = Point([tuple([details['end_coords']])])
+                end_row_idx, end_col_idx = src.index(end_coords.x, end_coords.y)
+                elev_end = elev_data[end_row_idx, end_col_idx]
+
+                details['elev_diff'] = elev_end - elev_start
 
         speed_in_mins = 5000 / 60
         for link_fid, details in self.itn_links.items():

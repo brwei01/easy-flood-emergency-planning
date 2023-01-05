@@ -50,6 +50,7 @@ def main():
 
 
         # Task 4
+        t3 = time.time()
         # Numbers of schemes
         user_num = len(nearest_node_user_input_fid)
         evacu_num = len(nearest_node_evacu_points_fid)
@@ -78,8 +79,8 @@ def main():
         print(f'The path is {final_decision_path["path_fid"]}')
         print(f'The total walking time is {final_decision_path["walking_time"]} minutes')
 
-        t3 = time.time()
-        print(t3 - t2)
+        t4 = time.time()
+        print(t4 - t3)
 
     except TypeError:
         pass

@@ -27,14 +27,14 @@ class HighestElevationLocator(object):
             out_meta = src.meta.copy()
             out_image, out_transform = self.masking()
             out_meta.update({
-                'driver': 'GTiff'
+                'driver': 'AAIGrid'
                 , 'height': out_image.shape[1]
                 , 'width': out_image.shape[2]
                 , 'transform': out_transform
             })
 
             root = os.path.dirname(os.getcwd())
-            out_file_path = os.path.join(root, 'Material', 'outputs', 'masked_raster.tif')
+            out_file_path = os.path.join(root, 'Material', 'outputs', 'masked_raster.asc')
             with rasterio.open(out_file_path, 'w', **out_meta) as out_file:
                 out_file.write(out_image)
 
@@ -43,9 +43,9 @@ class HighestElevationLocator(object):
     def highest_locator(self, masked_image_path):
         evacu_points = []
         with rasterio.open(masked_image_path, 'r') as masked_raster:
-            band_data = masked_raster.read(1) # this is in type array
-            evacu_record = np.where(band_data == np.amax(band_data))
-            evacu_point_xy = masked_raster.xy(evacu_record[0], evacu_record[1])
+            band_data = masked_raster.read(1)  # this is in type array
+            evacu_cell = np.where(band_data == band_data.max())
+            evacu_point_xy = masked_raster.xy(evacu_cell[0], evacu_cell[1])
             evacu_point = Point(evacu_point_xy[0][0], evacu_point_xy[1][0])
             evacu_points.append((evacu_point.x, evacu_point.y))
 
