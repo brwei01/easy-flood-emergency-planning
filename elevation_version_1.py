@@ -19,7 +19,8 @@ class HighestElevationLocator(object):
     def masking(self):
         geoms = [mapping(self.study_area)]
         with rasterio.open(self.dem_path, 'r') as src:
-            out_image, out_transform = mask(src, geoms, crop=True)
+            # msk = src.read_masks(1)
+            out_image, out_transform = mask(src, geoms, crop=True, nodata=0, filled=True)
         return out_image, out_transform
 
     def highest_locator(self):

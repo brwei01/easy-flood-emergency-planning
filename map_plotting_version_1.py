@@ -50,7 +50,7 @@ class MapPlotting(object):
         return
 
     def add_points(self):
-
+        '''evacu_point可能需要写个循环'''
         user_point = geometry.Point(self.user_input[0], self.user_input[1])
         evacu_point = geometry.Point(self.evacu_points[0][0], self.evacu_points[0][1])
         start_itn = geometry.Point(self.start_itn[0][0], self.start_itn[0][1])
@@ -77,7 +77,7 @@ class MapPlotting(object):
         self.ax.add_artist(ScaleBar(1, box_alpha=0.5))
 
     def add_elevation(self):
-        self.raster_img[self.raster_img == 0] = np.NaN
+        self.raster_img[self.raster_img == 0] = None
         show(self.raster_img, ax=self.ax, zorder=1, cmap='YlGn', alpha=0.7, transform=self.out_transform)
 
     def add_path(self):
