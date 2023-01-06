@@ -36,12 +36,14 @@ class UserInput(object):
                 point = Point(easting, northing)
 
                 try:
-                    if not point.within(island_boundary) and not point.touches(island_boundary):
-                        raise OutIslandAreaError
-                    if not point.within(boundary_rectangle) and not point.touches(boundary_rectangle):
-                        raise OutBoundaryRectangleError
                     if any([easting < 425000, northing < 75000, easting > 470000, northing > 100000]):
                         raise OutMapRangeError
+                    if not point.within(boundary_rectangle) and not point.touches(boundary_rectangle):
+                        raise OutBoundaryRectangleError
+                    if not point.within(island_boundary) and not point.touches(island_boundary):
+                        raise OutIslandAreaError
+
+
 
                 except OutIslandAreaError:
                     print('Might be a mistake! Input location not on Island')
