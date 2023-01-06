@@ -1,3 +1,5 @@
+import numpy as np
+
 from input_version_1 import UserInput
 from elevation_version_1 import HighestElevationLocator
 from nearest_ITN_version_1 import IntegratedTransportNetwork, GetPointCoords
@@ -7,6 +9,7 @@ import pandas as pd
 import geopandas as gpd
 from map_plotting_version_1 import MapPlotting
 import pickle
+import rasterio
 
 def main():
 
@@ -98,13 +101,14 @@ def main():
         #task 5
         print('After\n')
 
+
         print(f'The path is {final_decision_path["path_fid"].values}')
         print(f'The total walking time is {int(final_decision_path["walking_time"].values)} minutes')
 
         raster_img, out_transform = HighestElevationLocator(dem_path, study_area).masking()
         background_path = 'Material/background/raster-50k_2724246.tif'
         mp = MapPlotting(background_path, final_decision_path, user_input, nearest_node_evacu_points,
-                         raster_img, out_transform)
+                         nearest_node_user_input, nearest_node_evacu_points, raster_img, out_transform)
         mp.init_fig()
         mp.add_background()
         mp.add_points()

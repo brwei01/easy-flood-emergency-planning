@@ -14,11 +14,14 @@ from rasterio.plot import show
 
 class MapPlotting(object):
 
-    def __init__(self, background_path, final_decision_path, user_input, evacu_points, raster_img, out_transform):
+    def __init__(self, background_path, final_decision_path, user_input, evacu_points, start_point, end_point,
+                 raster_img, out_transform):
         self.background_path = background_path
         self.final_decision_path = final_decision_path
         self.user_input = user_input
         self.evacu_points = evacu_points
+        self.start_point = start_point
+        self.end_point = end_point
         self.raster_img = raster_img
         self.out_transform = out_transform
         self.start_point = 0
@@ -52,22 +55,20 @@ class MapPlotting(object):
         明天再说
         要plot 两个itn
         '''
-        self.start_point = geometry.Point(self.user_input[0], self.user_input[1])
-        self.highest_point = geometry.Point(self.evacu_points[0][0], self.evacu_points[0][1])
+        user_point = geometry.Point(self.user_input[0], self.user_input[1])
+        evacu_point = geometry.Point(self.evacu_points[0][0], self.evacu_points[0][1])
+        #start_point = geometry.Point(self.start_point[0][0], self.start_point[0][1])
+        #end_point = geometry.Point(self.end_point[0][1], self.end_point[0][1])
 
-        start_point = geopandas.GeoSeries([self.start_point],
-                                          crs='EPSG:27700',
-                                          index=['start']
-                                          )
+        #start_point = geopandas.GeoSeries([start_point], crs='EPSG:27700', index=['start_point'])
+        #end_point = geopandas.GeoSeries([end_point], crs='EPSG:27700', index=['end_point'])
+        user_point = geopandas.GeoSeries([user_point], crs='EPSG:27700', index=['user_point'])
+        evacu_point = geopandas.GeoSeries([evacu_point], crs='EPSG:27700', index=['evacuation_point'])
 
-        start_point.plot(ax=self.ax, color='red', markersize=3, zorder=3, label='Start point')
-
-        end_point = geopandas.GeoSeries([self.highest_point],
-                                        crs='EPSG:27700',
-                                        index=['end']
-                                        )
-
-        end_point.plot(ax=self.ax, color='blue', markersize=3, zorder=3, label='Highest point')
+        #start_point.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='start point')
+        #end_point.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='end point')
+        user_point.plot(ax=self.ax, color='red', markersize=3, zorder=3, label='User location')
+        evacu_point.plot(ax=self.ax, color='blue', markersize=3, zorder=3, label='Highest point')
 
         return
 
@@ -80,10 +81,11 @@ class MapPlotting(object):
         self.ax.add_artist(ScaleBar(1, box_alpha=0.5))
 
     def add_elevation(self):
+        self.raster_img[self.raster_img == 0] = np.NaN
         show(self.raster_img, ax=self.ax, zorder=1, cmap='YlGn', alpha=0.7, transform=self.out_transform)
 
     def add_path(self):
-        self.final_decision_path.plot(ax=self.ax, edgecolor='blue', linewidth=0.5, zorder=2, label='Path')
+        self.final_decision_path.plot(ax=self.ax, edgecolor='green', linewidth=0.5, zorder=2, label='Path')
 
     def show(self):
         """
