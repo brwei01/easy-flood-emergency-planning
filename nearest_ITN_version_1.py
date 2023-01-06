@@ -63,5 +63,5 @@ class GetPointCoords(object):
     def get_nearest_node_coords(self):
         node_coords_list = []
         for i in self.node_list:
-            node_coords_list.append(self.road_nodes[i]['coords'])
+            node_coords_list.append(tuple(self.road_nodes[i]['coords']))
         return node_coords_list

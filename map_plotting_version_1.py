@@ -14,14 +14,14 @@ from rasterio.plot import show
 
 class MapPlotting(object):
 
-    def __init__(self, background_path, final_decision_path, user_input, evacu_points, start_point, end_point,
+    def __init__(self, background_path, final_decision_path, user_input, evacu_points, start_itn, end_itn,
                  raster_img, out_transform):
         self.background_path = background_path
         self.final_decision_path = final_decision_path
         self.user_input = user_input
         self.evacu_points = evacu_points
-        self.start_point = start_point
-        self.end_point = end_point
+        self.start_itn = start_itn
+        self.end_itn = end_itn
         self.raster_img = raster_img
         self.out_transform = out_transform
         self.start_point = 0
@@ -50,25 +50,21 @@ class MapPlotting(object):
         return
 
     def add_points(self):
-        '''
-        这里可能还有点小问题
-        明天再说
-        要plot 两个itn
-        '''
+
         user_point = geometry.Point(self.user_input[0], self.user_input[1])
         evacu_point = geometry.Point(self.evacu_points[0][0], self.evacu_points[0][1])
-        #start_point = geometry.Point(self.start_point[0][0], self.start_point[0][1])
-        #end_point = geometry.Point(self.end_point[0][1], self.end_point[0][1])
+        start_itn = geometry.Point(self.start_itn[0][0], self.start_itn[0][1])
+        end_itn = geometry.Point(self.end_itn[0][0], self.end_itn[0][1])
 
-        #start_point = geopandas.GeoSeries([start_point], crs='EPSG:27700', index=['start_point'])
-        #end_point = geopandas.GeoSeries([end_point], crs='EPSG:27700', index=['end_point'])
         user_point = geopandas.GeoSeries([user_point], crs='EPSG:27700', index=['user_point'])
-        evacu_point = geopandas.GeoSeries([evacu_point], crs='EPSG:27700', index=['evacuation_point'])
+        evacu_point = geopandas.GeoSeries([evacu_point], crs='EPSG:27700', index=['evacu_point'])
+        start_itn = geopandas.GeoSeries([start_itn], crs='EPSG:27700', index=['start_itn'])
+        end_itn = geopandas.GeoSeries([end_itn], crs='EPSG:27700', index=['end_itn'])
 
-        #start_point.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='start point')
-        #end_point.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='end point')
         user_point.plot(ax=self.ax, color='red', markersize=3, zorder=3, label='User location')
         evacu_point.plot(ax=self.ax, color='blue', markersize=3, zorder=3, label='Highest point')
+        start_itn.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='start point')
+        end_itn.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='end point')
 
         return
 
