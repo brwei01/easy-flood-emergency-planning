@@ -12,6 +12,7 @@ class MapPlotting(object):
 
     def __init__(self, background_path, final_decision_path, user_input, evacu_points, start_itn, end_itn,
                  raster_img, out_transform):
+
         self.background_path = background_path
         self.final_decision_path = final_decision_path
         self.user_input = user_input
@@ -31,6 +32,7 @@ class MapPlotting(object):
     def init_fig(self):
         fig = plt.figure(figsize=(3, 3), dpi=300)
         self.ax = fig.add_subplot(1, 1, 1, projection=crs.OSGB())
+        return
 
     # load the background map
     def add_background(self):
@@ -42,16 +44,19 @@ class MapPlotting(object):
         back_array = background.read(1)
         bounds = background.bounds
         self.extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
+        print(self.extent)
 
         palette = np.array([value for key, value in background.colormap(1).items()])
         self.background_image = palette[back_array]
 
         # 20km x 20km of the surrounding area
         # set user_input point as the central point
-        self.display_extent = [self.user_input[0] - 10000, self.user_input[0] + 10000, self.user_input[1] - 10000,
-                               self.user_input[1] + 10000]
+
+        print(self.display_extent)
 
         self.ax.imshow(self.background_image, origin='upper', extent=self.extent, zorder=0)
+
+
         return
 
     # load the user location, highest point, start point and end point
@@ -86,7 +91,7 @@ class MapPlotting(object):
     # load the elevation image
     def add_elevation(self):
         self.raster_img[self.raster_img == 0] = None
-        show(self.raster_img, ax=self.ax, zorder=1, cmap='YlGn', alpha=0.7, transform=self.out_transform)
+        show(self.raster_img, ax=self.ax, zorder=1, cmap='RdYlGn', alpha=0.7, transform=self.out_transform)
 
     # load the shortest image
     def add_path(self):
@@ -94,7 +99,11 @@ class MapPlotting(object):
 
     # show the final image
     def show(self):
-        self.ax.set_extent(self.display_extent, crs=crs.OSGB())
+        xlim = [self.user_input[0] + 10000, self.user_input[0] - 10000]
+        ylim = [self.user_input[1] + 10000, self.user_input[1] - 10000]
+        self.ax.set_xlim(xlim)
+        self.ax.set_ylim(ylim)
+        #self.ax.set_extent(self.display_extent, projection=crs.OSGB())
         plt.legend(loc='lower right', fontsize=3)
         plt.show()
 

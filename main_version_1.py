@@ -1,5 +1,4 @@
 import numpy as np
-
 from input_version_1 import UserInput
 from elevation_version_1 import HighestElevationLocator
 from nearest_ITN_version_1 import IntegratedTransportNetwork, GetPointCoords
@@ -10,6 +9,7 @@ import geopandas as gpd
 from map_plotting_version_1 import MapPlotting
 import pickle
 import rasterio
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -106,6 +106,7 @@ def main():
 
         mp = MapPlotting(background_path, final_decision_path, user_input, evacu_points,
                          start_itn, end_itn, raster_img, out_transform)
+
         mp.init_fig()
         mp.add_background()
         mp.add_points()
