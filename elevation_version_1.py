@@ -10,7 +10,7 @@ import numpy as np
 import os
 
 # https://gis.stackexchange.com/questions/260304/extract-raster-values-within-shapefile-with-pygeoprocessing-or-gdal
-# gene, Nov 1, 2017
+# gene, Nov 5, 2017
 class HighestElevationLocator(object):
 
     def __init__(self, dem_path, study_area):
