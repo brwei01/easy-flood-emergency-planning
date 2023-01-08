@@ -42,14 +42,12 @@ class IntegratedTransportNetwork:
         x, y = self.input_point
         node = (x, y)
         node_idx_list = list(self.itn_idx.nearest(node, num_results=1))
-        #node_idx_list = [x for x in (self.itn_idx.nearest(node, num_results=1))]
 
         nearest_node_fid_list = []
         for i in node_idx_list:
             nearest_node_fid_list.append(self.itn_nodes_dict.get(i))
-        nearest_node_fid_list = list(set(nearest_node_fid_list))  # 去重复
+        nearest_node_fid_list = list(set(nearest_node_fid_list))
         return nearest_node_fid_list
-
 
 
 class GetPointCoords(object):
@@ -61,6 +59,7 @@ class GetPointCoords(object):
         self.road_nodes = input_itn['roadnodes']
 
     def get_nearest_node_coords(self):
+        # Get coordinates of nearest nodes
         node_coords_list = []
         for i in self.node_list:
             node_coords_list.append(tuple(self.road_nodes[i]['coords']))
