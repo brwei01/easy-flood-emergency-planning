@@ -23,29 +23,37 @@ class DataManipulation(object):
         # adding colums: start_coords, end_coords, elev_diff, walking_time to itn_links
         # which are necessary for weight calculation of graph edges
 
+        # find the start and end nodes of each edge
         for link_fid, details in self.itn_links.items():
             details['start_coords'] = self.itn_nodes[details['start']]['coords']
             details['end_coords'] = self.itn_nodes[details['end']]['coords']
 
+        # read dem data
         with rasterio.open(self.dem_path) as src:
             elev_data = src.read(1)
 
         for link, details in self.itn_links.items():
+            # turn coords to shapely.Point
             start_coords = Point(details['start_coords'][0], details['start_coords'][1])
+            # Query elevation based on coordinates
             start_row_idx, start_col_idx = src.index(start_coords.x, start_coords.y)
             elev_start = elev_data[start_row_idx, start_col_idx]
             end_coords = Point(details['end_coords'][0], details['end_coords'][1])
             end_row_idx, end_col_idx = src.index(end_coords.x, end_coords.y)
             elev_end = elev_data[end_row_idx, end_col_idx]
-
+            # Calculates the height difference between the start and end nodes
             details['elev_diff'] = elev_end - elev_start
 
         speed_in_mins = 5000 / 60
         for link_fid, details in self.itn_links.items():
             distance = details['length']
+            # cal weight of edges
+            # cal H_time
             total_time = distance / speed_in_mins
+            # cal V_time
             if details['elev_diff'] > 0:
                 additional_time = details['elev_diff'] / 10
+                #total_time = H_time + V_time
                 total_time += additional_time
             details['walking_time'] = total_time
 
@@ -55,7 +63,9 @@ class DataManipulation(object):
     def graph_gen(self):
         '''generate graph'''
         updated_itn_links = self.add_keys_to_itnlink_vertices()
+        # First, build an empty graph
         graph = nx.Graph()
+        # add edge to graph
         for link_fid, details in updated_itn_links.items():
             graph.add_edge(details['start'], details['end'], fid=link_fid, weight=details['walking_time'])
         return graph
@@ -72,14 +82,18 @@ class ShortestPath(object):
         self.itn_links = itn_data['roadlinks']
 
         dm = DataManipulation(itn_file_path, dem_path)
+        # Generate graphs with DataManipulation
+
         self.graph = dm.graph_gen()
 
+    # find shorest path between user_itn_fid and evacu_itn_fid
     def find_path(self, user_itn_fid, evacu_itn_fid):
         # finding the shorest path by dijkstra:
         path = nx.dijkstra_path(self.graph, source=user_itn_fid, target=evacu_itn_fid, weight='weight')
         # time = nx.dijkstra_path_length(graph, source=user_itn_fid, target=evacu_itn_fid, weight='weight')
         return path
 
+    # turn path to shapely.Linestring
     def path_to_linestring(self, path):
         links = []
         geom = []
