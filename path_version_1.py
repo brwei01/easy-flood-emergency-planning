@@ -99,7 +99,7 @@ class ShortestPath(object):
         time = 0
         first_node = path[0]
 
-        # a str to store the road names on path.
+        # set up a str to store the road names on path.
         path_names = ''
         last_road = None
         counter = 1
@@ -114,10 +114,9 @@ class ShortestPath(object):
                     # if the current link is contained in the same road as the last, then not adding it
                     if current_road != last_road:
                         last_road = current_road
-                        path_names += current_road
-                        # if it's the last link then do not add commas
-                        if counter != len(path)-1:
-                            path_names += ', '
+                        path_names += current_road + ", "
+
+
 
             links.append(link_fid)
             time += self.graph.edges[first_node, node]['weight']
