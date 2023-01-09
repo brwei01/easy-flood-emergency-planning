@@ -70,12 +70,12 @@ class MapPlotting(object):
     def add_start_points(self):
         start_itn = geometry.Point(self.start_itn[0][0], self.start_itn[0][1])
         start_itn = geopandas.GeoSeries([start_itn], crs='EPSG:27700', index=['start_itn'])
-        start_itn.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='Start point')
+        start_itn.plot(ax=self.ax, color='green', marker='^', markersize=2, zorder=3, label='Start point')
 
     def add_end_points(self):
         end_itn = geometry.Point(self.end_itn[0][0], self.end_itn[0][1])
         end_itn = geopandas.GeoSeries([end_itn], crs='EPSG:27700', index=['end_itn'])
-        end_itn.plot(ax=self.ax, color='black', markersize=1.5, zorder=3, label='End point')
+        end_itn.plot(ax=self.ax, color='green', marker='s', markersize=2, zorder=3, label='End point')
 
     # load the north arrow
     def add_north_arrow(self):

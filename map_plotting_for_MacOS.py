@@ -61,7 +61,7 @@ class MapPlotting(object):
         for i, evacu_point in enumerate(self.evacu_points):
             evacu_point = geometry.Point(self.evacu_points[0][0], self.evacu_points[0][1])
             evacu_point = geopandas.GeoSeries([evacu_point], crs='EPSG:27700', index=['evacu_point'])
-            evacu_point.plot(ax=self.ax, color='blue', markersize=0.5, zorder=3, label=f'Highest point {i + 1}')
+            evacu_point.plot(ax=self.ax, color='blue', markersize=3, zorder=3, label=f'Highest point {i + 1}')
 
     def add_user_points(self):
         user_point = geometry.Point(self.user_input[0], self.user_input[1])
@@ -71,12 +71,12 @@ class MapPlotting(object):
     def add_start_points(self):
         start_itn = geometry.Point(self.start_itn[0][0], self.start_itn[0][1])
         start_itn = geopandas.GeoSeries([start_itn], crs='EPSG:27700', index=['start_itn'])
-        start_itn.plot(ax=self.ax, color='green', markersize=1.5, zorder=3, label='Start point')
+        start_itn.plot(ax=self.ax, color='green', marker='^', markersize=2, zorder=3, label='Start point')
 
     def add_end_points(self):
         end_itn = geometry.Point(self.end_itn[0][0], self.end_itn[0][1])
         end_itn = geopandas.GeoSeries([end_itn], crs='EPSG:27700', index=['end_itn'])
-        end_itn.plot(ax=self.ax, color='black', markersize=1.5, zorder=3, label='End point')
+        end_itn.plot(ax=self.ax, color='green', marker='s', markersize=2, zorder=3, label='End point')
 
     # load the north arrow
     def add_north_arrow(self):
