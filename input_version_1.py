@@ -113,4 +113,3 @@ class StudyArea(object):
         # return the outlines as geometry array
         return gdf['geometry'].values[0]
 
-
