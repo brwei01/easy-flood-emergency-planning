@@ -1,7 +1,5 @@
 from rtree import index
 import json
-import matplotlib
-matplotlib.use("TkAgg")
 
 
 class IntegratedTransportNetwork:

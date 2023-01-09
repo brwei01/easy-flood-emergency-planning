@@ -10,10 +10,8 @@ class DataManipulation(object):
 
         self.itn_file_path = itn_file_path
         self.dem_path = dem_path
-
-        #cwd = os.getcwd()
-        #self.itn_output_path = os.path.join(cwd, 'Material', 'outputs', 'modified_itnlink.json')
-
+        # cwd = os.getcwd()
+        # self.itn_output_path = os.path.join(cwd, 'Material', 'outputs', 'modified_itnlink.json')
         with open(itn_file_path, 'r') as f:
             itn_data = json.load(f)
         self.itn_nodes = itn_data['roadnodes']

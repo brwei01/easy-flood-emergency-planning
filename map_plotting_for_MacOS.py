@@ -6,6 +6,8 @@ import geopandas
 from shapely import geometry
 from matplotlib import pyplot as plt
 from rasterio.plot import show
+import matplotlib
+matplotlib.use("TkAgg")
 
 
 class MapPlotting(object):
@@ -109,4 +111,8 @@ class MapPlotting(object):
 
         # add elevation range bar
         plt.colorbar(self.im, ax=self.ax, shrink=0.7, label='Elevation(m)')
-        plt.show(block=False)
+        plt.show()
+
+    def close(self):
+        plt.close()
+

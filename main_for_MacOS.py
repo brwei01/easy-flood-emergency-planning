@@ -5,6 +5,8 @@ from path_version_1 import ShortestPath, DataManipulation
 import pandas as pd
 import geopandas as gpd
 from map_plotting_for_MacOS import MapPlotting
+import matplotlib
+matplotlib.use("TkAgg")
 
 
 def main():
@@ -105,6 +107,7 @@ def main():
         mp.add_north_arrow()
         mp.add_elevation()
         mp.add_path()
+        mp.adjust_legend()
         mp.show()
 
     except TypeError:

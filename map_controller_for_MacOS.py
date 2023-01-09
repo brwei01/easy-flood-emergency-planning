@@ -1,7 +1,10 @@
 from map_plotting_version_1 import *
 import tkinter as tk
 from tkinter import ttk
-
+import matplotlib
+import tkmacosx as tkm
+from tkmacosx import *
+matplotlib.use("TkAgg")
 
 class MapController(object):
 

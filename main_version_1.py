@@ -6,8 +6,6 @@ import time
 import pandas as pd
 import geopandas as gpd
 from map_controller import *
-import matplotlib
-matplotlib.use("TkAgg")
 
 
 def main():
