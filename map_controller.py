@@ -6,7 +6,7 @@ from tkinter import ttk
 class MapController(object):
 
     def __init__(self, mp, background_path, final_decision_path, user_input, evacu_points,
-                                      start_itn, end_itn, raster_img, out_transform):
+                 start_itn, end_itn, raster_img, out_transform):
         self.mp = mp
         self.background_path = background_path
         self.final_decision_path = final_decision_path

@@ -59,7 +59,7 @@ class GetPointCoords(object):
         self.road_nodes = input_itn['roadnodes']
 
     def get_nearest_node_coords(self):
-        # Get coordinates of nearest nodes
+        # Get coordinates of the nearest nodes
         node_coords_list = []
         for i in self.node_list:
             node_coords_list.append(tuple(self.road_nodes[i]['coords']))

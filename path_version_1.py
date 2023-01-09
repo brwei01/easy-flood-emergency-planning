@@ -17,6 +17,7 @@ class DataManipulation(object):
         self.itn_nodes = itn_data['roadnodes']
         self.itn_links = itn_data['roadlinks']
 
+
     def add_keys_to_itnlink_vertices(self):
         # adding colums: start_coords, end_coords, elev_diff, walking_time to itn_links
         # which are necessary for weight calculation of graph edges
@@ -26,20 +27,22 @@ class DataManipulation(object):
             details['start_coords'] = self.itn_nodes[details['start']]['coords']
             details['end_coords'] = self.itn_nodes[details['end']]['coords']
 
-        # read dem data
+        # read elevation_data
         with rasterio.open(self.dem_path) as src:
             elev_data = src.read(1)
-
+        # enumerate key-value pairs in itn_links
         for link, details in self.itn_links.items():
-            # turn coords to shapely.Point
+            # turn start, end point coordinates to shapely.Point
             start_coords = Point(details['start_coords'][0], details['start_coords'][1])
-            # Query elevation based on coordinates
-            start_row_idx, start_col_idx = src.index(start_coords.x, start_coords.y)
-            elev_start = elev_data[start_row_idx, start_col_idx]
             end_coords = Point(details['end_coords'][0], details['end_coords'][1])
+            # Query cell indexes based on coordinates
+            start_row_idx, start_col_idx = src.index(start_coords.x, start_coords.y)
             end_row_idx, end_col_idx = src.index(end_coords.x, end_coords.y)
+            # get elevation data at the cell being queried
+            elev_start = elev_data[start_row_idx, start_col_idx]
             elev_end = elev_data[end_row_idx, end_col_idx]
             # Calculates the height difference between the start and end nodes
+            # add elevational differences to data
             details['elev_diff'] = elev_end - elev_start
 
         speed_in_mins = 5000 / 60
@@ -51,15 +54,14 @@ class DataManipulation(object):
             # cal V_time
             if details['elev_diff'] > 0:
                 additional_time = details['elev_diff'] / 10
-                #total_time = H_time + V_time
+                # total_time = H_time + V_time
                 total_time += additional_time
             details['walking_time'] = total_time
-
+        # update self.itn_links data
         return self.itn_links
-        #return self.itn_links
 
     def graph_gen(self):
-        '''generate graph'''
+        # generate graph
         updated_itn_links = self.add_keys_to_itnlink_vertices()
         # First, build an empty graph
         graph = nx.Graph()
@@ -115,8 +117,6 @@ class ShortestPath(object):
                     if current_road != last_road:
                         last_road = current_road
                         path_names += current_road + ", "
-
-
 
             links.append(link_fid)
             time += self.graph.edges[first_node, node]['weight']
